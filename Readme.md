@@ -6,7 +6,7 @@ This project is designed for studying the KLC list of kanji by introducing a fix
 
 ## Design:
 Each blog entry will introduce a fixed number of kanji from the KLC list, in order introduced in the KLC book. The last known kanji number is stored in config.yaml.  The daily script increments this number and fetches the daily kanji and a selection of words that use all known kanji, including the new kanji for today.
-\.
+
 The note generated displays each kanji, along with a brief description and readings.  Sample words are also included that use only known kanji and kana.
 It is the task of the writer to construct some sentences that use these words, ideally in some sort of story.
 This will help build vocabulary and reinforce grammar.
@@ -43,8 +43,14 @@ Note: it is possible to use Docker as well instead of Podman.  You will have to 
 ## Initial one-time setup
 1. Clone this repository. `git clone https://github.com/darkmusic/hexojp-klc`
 2. Copy **dockerfiles/dev/db/config_template.yaml** to **dockerfiles/dev/db/config.yaml** and edit accordingly.
-3. Edit **dev/_config.yml** as needed.
-4. `cargo make init`
+3. Edit **dockerfiles/dev/_config.yml** as needed.
+4. In **dockerfiles/dev/Dockerfile**, edit the country code if needed in this line:
+```docker
+RUN reflector -l 5 --protocol https --sort rate --country US --save /etc/pacman.d/mirrorlist
+```
+You can use either a 2-character country code or a country name here.  If you use a country name that has spaces, you must enclose it in double quotes.
+
+5. Run `cargo make init` to initialize the containers.
 
 ## Regular daily steps
 1. `cargo make daily`
@@ -54,11 +60,11 @@ Note: it is possible to use Docker as well instead of Podman.  You will have to 
 5. [View the site in a browser.](http://localhost:4000)
 
 ## As needed
-- Edit dockerfiles/dev/_config.yml, then run `cargo make dev sync up`
-- Edit dockerfiles/dev/themes, then run  `cargo make dev sync up`
-- Edit dockerfiles/dev/scaffolds, then run  `cargo make dev sync up`
-- Edit dockerfiles/dev/db/config.yaml, then run  `cargo make dev sync up`
-- Edit any post under dockerfiles/dev/source/_posts, then run  `cargo make dev sync up`
+- Edit dockerfiles/dev/_config.yml, then run `cargo make generate`
+- Edit dockerfiles/dev/themes, then run  `cargo make generate`
+- Edit dockerfiles/dev/scaffolds, then run  `cargo make generate`
+- Edit dockerfiles/dev/db/config.yaml, then run  `cargo make generate`
+- Edit any post under dockerfiles/dev/source/_posts, then run  `cargo make generate`
 - Run `cargo make dev sync down` to sync changes from the container to the local directory.  Note that if you've made any local changes, this will overwrite them!
 - Run `cargo make podman up` to start the podman stack.
 - Run `cargo make podman stop` to stop the podman stack.
