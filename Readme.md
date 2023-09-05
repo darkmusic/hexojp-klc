@@ -20,12 +20,12 @@ There is no time limit to finishing a blog post, so each entry does not have to 
 
 ## Tech Stack: Dev Container
 - [Arch Linux](https://archlinux.org/) is used as a dev container for generating notes and hosting/maintaining the website.
-- [Node JS](https://nodejs.org/en) v16.20.0 is used with [Hexo](https://hexo.io/index.html) to serve as a static website generator.
+- [Node JS](https://nodejs.org/en) is used with [Hexo](https://hexo.io/index.html) to serve as a static website generator.
 - [Perl 5](https://www.perl.org) + [DBI](https://dbi.perl.org/)  + [DBD::Pg](https://metacpan.org/pod/DBD::Pg) is used for DB scripts.
 - [Cargo-Make](https://github.com/sagiegurari/cargo-make) is used as a build/task runner.
 
 ## Tech Stack: DB Container
-- [Postgresql](https://www.postgresql.org/) 16 RC1 is used for the DB backend (used for note creation only).
+- [Postgresql](https://www.postgresql.org/) is used for the DB backend (used for note creation only).
 
 ## Tech Stack: Host
 - [Podman](https://podman.io/) is used locally to host Postgresql, rootless containers preferred.
