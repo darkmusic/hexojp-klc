@@ -54,11 +54,12 @@ Note: it is possible to use Docker as well instead of Podman.  You will have to 
 5. [View the site in a browser.](http://localhost:4000)
 
 ## As needed
-- Edit dev/_config.yml, then run `cargo make dev sync up`
-- Edit dev/themes, then run  `cargo make dev sync up`
-- Edit dev/scaffolds, then run  `cargo make dev sync up`
-- Edit dev/db/config.yaml, then run  `cargo make dev sync up`
-- Run  `cargo make dev sync down` to sync changes from the container to the local directory.  Note that if you've made any local changes, this will overwrite them!
+- Edit dockerfiles/dev/_config.yml, then run `cargo make dev sync up`
+- Edit dockerfiles/dev/themes, then run  `cargo make dev sync up`
+- Edit dockerfiles/dev/scaffolds, then run  `cargo make dev sync up`
+- Edit dockerfiles/dev/db/config.yaml, then run  `cargo make dev sync up`
+- Edit any post under dockerfiles/dev/source/_posts, then run  `cargo make dev sync up`
+- Run `cargo make dev sync down` to sync changes from the container to the local directory.  Note that if you've made any local changes, this will overwrite them!
 - Run `cargo make podman up` to start the podman stack.
 - Run `cargo make podman stop` to stop the podman stack.
 - Run `cargo make podman build` to manually build the containers.
