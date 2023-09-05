@@ -26,7 +26,7 @@ extend = "subcommand"
 env = { "SUBCOMMAND_PREFIX" = "podman" }
 
 ################################################################################
-## General tasks
+## General/shorthand tasks
 ################################################################################
 
 [tasks.daily]
@@ -42,6 +42,12 @@ podman-compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo mak
 
 [tasks.init]
 dependencies = ["podman_up", "db_restore"]
+
+[tasks.generate]
+dependencies = ["dev_generate"]
+
+[tasks.server]
+dependencies = ["dev_server"]
 
 ################################################################################
 ## Podman tasks
