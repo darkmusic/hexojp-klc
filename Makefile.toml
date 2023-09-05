@@ -1,0 +1,177 @@
+################################################################################
+## Utility tasks
+################################################################################
+
+[tasks.subcommand]
+private = true
+script = '''
+#!@duckscript
+
+cm_run_task ${SUBCOMMAND_PREFIX}_${1}
+'''
+
+[tasks.db]
+private = false
+extend = "subcommand"
+env = { "SUBCOMMAND_PREFIX" = "db" }
+
+[tasks.dev]
+private = false
+extend = "subcommand"
+env = { "SUBCOMMAND_PREFIX" = "dev" }
+
+[tasks.podman]
+private = false
+extend = "subcommand"
+env = { "SUBCOMMAND_PREFIX" = "podman" }
+
+################################################################################
+## General tasks
+################################################################################
+
+[tasks.daily]
+dependencies = ["podman_up", "call_daily", "dev_sync_down"]
+
+[tasks.call_daily]
+private = true
+dependencies = ["podman_up"]
+script_runner = "@shell"
+script = '''
+podman-compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo make daily
+'''
+
+[tasks.init]
+dependencies = ["podman_up", "db_restore"]
+
+################################################################################
+## Podman tasks
+################################################################################
+
+[tasks.podman_down]
+script_runner = "@shell"
+script = '''
+podman-compose down
+'''
+
+[tasks.podman_up]
+script_runner = "@shell"
+script = '''
+podman-compose up -d
+'''
+
+[tasks.podman_build]
+script_runner = "@shell"
+script = '''
+podman-compose build
+'''
+
+[tasks.podman_build_nocache]
+script_runner = "@shell"
+script = '''
+podman-compose build --no-cache
+'''
+
+[tasks.podman_stop]
+script_runner = "@shell"
+script = '''
+podman-compose stop
+'''
+
+[tasks.podman_prune]
+script_runner = "@shell"
+script = '''
+podman system prune
+'''
+
+[tasks.podman_prune_volumes]
+script_runner = "@shell"
+script = '''
+podman system prune --volumes
+'''
+
+################################################################################
+## DB tasks
+################################################################################
+
+[tasks.db_dump]
+script_runner = "@shell"
+script = '''
+cd dockerfiles/db
+rm *.tar.gz
+pg_dump -h localhost -U hexojpadmin hexojp -F c -Z 9 -f hexojp.tar.gz
+'''
+
+[tasks.db_restore]
+script_runner = "@shell"
+script = '''
+podman-compose exec -T -u postgres hexojpdb pg_restore -h localhost -U hexojpadmin -d hexojp -F c < dockerfiles/db/hexojp.tar.gz
+'''
+
+[tasks.db_logs]
+script_runner = "@shell"
+script = '''
+podman-compose logs hexojpdb
+'''
+
+################################################################################
+## Dev tasks
+################################################################################
+
+[tasks.dev_logs]
+script_runner = "@shell"
+script = '''
+podman-compose logs hexojpdev
+'''
+
+[tasks.db_connect]
+script_runner = "@shell"
+script = '''
+podman-compose exec --privileged -u root hexojpdb bash
+'''
+
+[tasks.dev_connect]
+script_runner = "@shell"
+script = '''
+podman-compose exec --privileged -u root hexojpdev sh
+'''
+
+[tasks.dev_sync_up]
+script_runner = "@shell"
+script = '''
+podman cp dockerfiles/dev/ci hexojpdev:/home/hexojp/code/hexojp
+podman cp dockerfiles/dev/db hexojpdev:/home/hexojp/code/hexojp
+podman cp dockerfiles/dev/db/config.yaml hexojpdev:/home/hexojp/code/hexojp/db/config.yaml
+podman cp dockerfiles/dev/_config.yml hexojpdev:/home/hexojp/code/hexojp/_config.yml
+podman cp dockerfiles/dev/_config.landscape.yml hexojpdev:/home/hexojp/code/hexojp/_config.landscape.yml
+podman cp dockerfiles/dev/scaffolds hexojpdev:/home/hexojp/code/hexojp
+podman cp dockerfiles/dev/themes hexojpdev:/home/hexojp/code/hexojp
+podman cp dockerfiles/dev/source hexojpdev:/home/hexojp/code/hexojp
+podman cp hexojpdev:/home/hexojp/code/hexojp/db/config.yaml dockerfiles/dev/db/config.yaml
+podman cp hexojpdev:/home/hexojp/code/hexojp/source dockerfiles/dev
+'''
+
+[tasks.dev_sync_down]
+script_runner = "@shell"
+script = '''
+podman cp hexojpdev:/home/hexojp/code/hexojp/db/config.yaml dockerfiles/dev/db/config.yaml
+podman cp hexojpdev:/home/hexojp/code/hexojp/source dockerfiles/dev
+'''
+
+[tasks.dev_generate]
+dependencies = ["dev_sync_up"]
+script_runner = "@shell"
+script = '''
+podman-compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo make generate
+'''
+
+[tasks.dev_server]
+script_runner = "@shell"
+script = '''
+podman-compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo make server
+'''
+
+[tasks.dev_pacman_update]
+script_runner = "@shell"
+script = '''
+podman-compose exec -u root --privileged -w /home/hexojp/code/hexojp/ci hexojpdev cargo make pacman_update
+'''

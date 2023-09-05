@@ -1,0 +1,41 @@
+[tasks.daily]
+script_runner = "@shell"
+script = '''
+cd ../db
+perl daily.pl
+'''
+
+[tasks.dumpdb]
+script_runner = "@shell"
+script = '''
+cd ../dockerfiles/db
+rm *.tar.gz
+pg_dump -h localhost -U hexojpadmin hexojp -F c -Z 9 -f hexojp.tar.gz
+'''
+
+[tasks.restoredb]
+script_runner = "@shell"
+script = '''
+cd ../dockerfiles/db
+pg_restore -h localhost -U hexojpadmin -d hexojp < hexojp.tar.gz
+'''
+
+[tasks.generate]
+script_runner = "@shell"
+script = '''
+cd ..
+hexo generate
+'''
+
+[tasks.server]
+script_runner = "@shell"
+script = '''
+cd ..
+hexo server
+'''
+
+[tasks.pacman_update]
+script_runner = "@shell"
+script = '''
+pacman -Syu
+'''

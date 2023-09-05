@@ -1,0 +1,4 @@
+package-lock.json
+node_modules
+dockerfiles/dev/db/config.yaml
+dockerfiles/dev/public

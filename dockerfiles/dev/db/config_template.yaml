@@ -1,0 +1,9 @@
+---
+daily_study_number: 20
+database: hexojp
+host: hexojpdb
+last_known_klc_num: 0
+max_words: 50
+password: hexojpadmin
+port: 5432
+userid: hexojpadmin

@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  hexojpdb:
+    build: 
+      context: ./dockerfiles/db
+    environment:
+      - POSTGRES_USER=hexojpadmin
+      - POSTGRES_PASSWORD=hexojpadmin
+      - POSTGRES_DB=hexojp
+    container_name: hexojpdb
+    ports:
+      - "5432:5432"
+    volumes:
+      -  postgres:/var/lib/postgresql/data
+    networks:
+      - hexojp-network
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=1000"
+      - "-c"
+      - "shared_buffers=3GB"
+  hexojpdev:
+    container_name: hexojpdev
+    build:
+      context: ./dockerfiles/dev
+    ports:
+      - "4000:4000"
+    tty: true
+    networks:
+      - hexojp-network
+
+volumes:
+  postgres:
+
+networks:
+  hexojp-network:
