@@ -41,9 +41,10 @@ Note: it is possible to use Docker as well instead of Podman.  You will have to 
 6. Install [Cargo-Make](https://github.com/sagiegurari/cargo-make) - Either by `cargo install cargo-make` or using your system's package manager.
 
 ## Initial one-time setup
-1. Copy **dockerfiles/dev/db/config_template.yaml** to **dockerfiles/dev/db/config.yaml** and edit accordingly.
-2. Edit **dev/_config.yml** as needed.
-3. `cargo make init`
+1. Clone this repository. `git clone https://github.com/darkmusic/hexojp-klc`
+2. Copy **dockerfiles/dev/db/config_template.yaml** to **dockerfiles/dev/db/config.yaml** and edit accordingly.
+3. Edit **dev/_config.yml** as needed.
+4. `cargo make init`
 
 ## Regular daily steps
 1. `cargo make daily`
