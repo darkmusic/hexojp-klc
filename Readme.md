@@ -13,10 +13,10 @@ This will help build vocabulary and reinforce grammar.
 There is no time limit to finishing a blog post, so each entry does not have to be daily. But in the interest of learning 2300 kanji, it is recommended to write a blog entry at least a few times a week.
 
 ## Daily Kanji with Meanings and On/Kun Readings
-![Main page showing readings](/images/Readings.png)
+![Main page showing readings](/images/Readings.jpg)
 
 ## Daily Random Selection of Words with Only Known Kanji and Kana
-![Main page showing words](/images/Words.png)
+![Main page showing words](/images/Words.jpg)
 
 ## Tech Stack: Dev Container
 - [Arch Linux](https://archlinux.org/) is used as a dev container for generating notes and hosting/maintaining the website.
