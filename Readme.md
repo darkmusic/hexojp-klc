@@ -48,7 +48,7 @@ Note: it is possible to use Docker as well instead of Podman.  You will have to 
 
 ## Regular daily steps
 1. `cargo make daily`
-2. Edit note as needed.
+2. Edit note as needed (under **dockerfiles/dev/source/_posts**).
 3. `cargo make generate`
 4. `cargo make server`
 5. [View the site in a browser.](http://localhost:4000)
