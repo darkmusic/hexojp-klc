@@ -2,3 +2,5 @@ package-lock.json
 node_modules
 dockerfiles/dev/db/config.yaml
 dockerfiles/dev/public
+dockerfiles/dev/db.json
+dockerfiles/dev/source/_posts/*.md

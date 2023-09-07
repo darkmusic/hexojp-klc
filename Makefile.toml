@@ -161,6 +161,7 @@ script_runner = "@shell"
 script = '''
 podman cp hexojpdev:/home/hexojp/code/hexojp/db/config.yaml dockerfiles/dev/db/config.yaml
 podman cp hexojpdev:/home/hexojp/code/hexojp/source dockerfiles/dev
+podman cp hexojpdev:/home/hexojp/code/hexojp/db.json dockerfiles/dev/db.json
 '''
 
 [tasks.dev_generate]
