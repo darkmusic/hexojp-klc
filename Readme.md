@@ -37,6 +37,7 @@ Note: it is possible to use Docker as well instead of Podman.  You will have to 
 1. Install [Podman](https://podman.io/).
 2. Install [Podman-compose](https://github.com/containers/podman-compose).
 3. If needed, [configure Podman rootless support](https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md) (recommended for security reasons). If you do not use rootless containers, then you may need to update the tasks in Makefile.toml.
+4. You may also need `aardvark-dns` if on Linux, for dns support between containers.
 5. Install [Rust](https://www.rust-lang.org/) by using either [rustup](https://rustup.rs/) or your system's package manager.
 6. Install [Cargo-Make](https://github.com/sagiegurari/cargo-make) - Either by `cargo install cargo-make` or using your system's package manager.
 
