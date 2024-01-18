@@ -138,6 +138,12 @@ podman-compose exec --privileged -u root hexojpdb bash
 [tasks.dev_connect]
 script_runner = "@shell"
 script = '''
+podman-compose exec --privileged -u hexojp hexojpdev sh
+'''
+
+[tasks.dev_connect_root]
+script_runner = "@shell"
+script = '''
 podman-compose exec --privileged -u root hexojpdev sh
 '''
 
@@ -165,7 +171,7 @@ podman cp hexojpdev:/home/hexojp/code/hexojp/db.json dockerfiles/dev/db.json
 '''
 
 [tasks.dev_generate]
-dependencies = ["dev_sync_up"]
+dependencies = ["dev_sync_up", "dev_fix_permissions"]
 script_runner = "@shell"
 script = '''
 podman-compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo make generate
@@ -181,4 +187,10 @@ podman-compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo mak
 script_runner = "@shell"
 script = '''
 podman-compose exec -u root --privileged -w /home/hexojp/code/hexojp/ci hexojpdev cargo make pacman_update
+'''
+
+[tasks.dev_fix_permissions]
+script_runner = "@shell"
+script = '''
+podman-compose exec -u root --privileged hexojpdev chown -R hexojp:hexojp /home/hexojp/code/hexojp
 '''

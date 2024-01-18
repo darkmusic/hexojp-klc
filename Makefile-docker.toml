@@ -1,0 +1,198 @@
+################################################################################
+## Utility tasks
+################################################################################
+
+[tasks.subcommand]
+private = true
+script = '''
+#!@duckscript
+
+cm_run_task ${SUBCOMMAND_PREFIX}_${1}
+'''
+
+[tasks.db]
+private = false
+extend = "subcommand"
+env = { "SUBCOMMAND_PREFIX" = "db" }
+
+[tasks.dev]
+private = false
+extend = "subcommand"
+env = { "SUBCOMMAND_PREFIX" = "dev" }
+
+[tasks.docker]
+private = false
+extend = "subcommand"
+env = { "SUBCOMMAND_PREFIX" = "docker" }
+
+################################################################################
+## General/shorthand tasks
+################################################################################
+
+[tasks.daily]
+dependencies = ["docker_up", "call_daily", "dev_sync_down"]
+
+[tasks.call_daily]
+private = true
+dependencies = ["docker_up"]
+script_runner = "@shell"
+script = '''
+docker compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo make daily
+'''
+
+[tasks.init]
+dependencies = ["docker_up", "db_restore"]
+
+[tasks.generate]
+dependencies = ["dev_generate"]
+
+[tasks.server]
+dependencies = ["dev_server"]
+
+################################################################################
+## docker tasks
+################################################################################
+
+[tasks.docker_down]
+script_runner = "@shell"
+script = '''
+docker compose down
+'''
+
+[tasks.docker_up]
+script_runner = "@shell"
+script = '''
+docker compose up -d
+'''
+
+[tasks.docker_build]
+script_runner = "@shell"
+script = '''
+docker compose build
+'''
+
+[tasks.docker_build_nocache]
+script_runner = "@shell"
+script = '''
+docker compose build --no-cache
+'''
+
+[tasks.docker_stop]
+script_runner = "@shell"
+script = '''
+docker compose stop
+'''
+
+[tasks.docker_prune]
+script_runner = "@shell"
+script = '''
+docker system prune
+'''
+
+[tasks.docker_prune_volumes]
+script_runner = "@shell"
+script = '''
+docker system prune --volumes
+'''
+
+################################################################################
+## DB tasks
+################################################################################
+
+[tasks.db_dump]
+script_runner = "@shell"
+script = '''
+cd dockerfiles/db
+rm *.tar.gz
+pg_dump -h localhost -p 5432 -U hexojpadmin hexojp -F c -Z 9 -f hexojp.tar.gz
+'''
+
+[tasks.db_restore]
+script_runner = "@shell"
+script = '''
+docker compose exec -T -u postgres hexojpdb pg_restore -h localhost -p 5432 -U hexojpadmin -d hexojp -F c < dockerfiles/db/hexojp.tar.gz
+'''
+
+[tasks.db_logs]
+script_runner = "@shell"
+script = '''
+docker compose logs hexojpdb
+'''
+
+################################################################################
+## Dev tasks
+################################################################################
+
+[tasks.dev_logs]
+script_runner = "@shell"
+script = '''
+docker compose logs hexojpdev
+'''
+
+[tasks.db_connect]
+script_runner = "@shell"
+script = '''
+docker compose exec --privileged -u root hexojpdb bash
+'''
+
+[tasks.dev_connect]
+script_runner = "@shell"
+script = '''
+docker compose exec --privileged -u hexojp hexojpdev sh
+'''
+
+[tasks.dev_connect_root]
+script_runner = "@shell"
+script = '''
+docker compose exec --privileged -u root hexojpdev sh
+'''
+
+[tasks.dev_sync_up]
+script_runner = "@shell"
+script = '''
+docker cp dockerfiles/dev/ci hexojpdev:/home/hexojp/code/hexojp
+docker cp dockerfiles/dev/db hexojpdev:/home/hexojp/code/hexojp
+docker cp dockerfiles/dev/db.json hexojpdev:/home/hexojp/code/hexojp
+docker cp dockerfiles/dev/db/config.yaml hexojpdev:/home/hexojp/code/hexojp/db/config.yaml
+docker cp dockerfiles/dev/_config.yml hexojpdev:/home/hexojp/code/hexojp/_config.yml
+docker cp dockerfiles/dev/_config.landscape.yml hexojpdev:/home/hexojp/code/hexojp/_config.landscape.yml
+docker cp dockerfiles/dev/scaffolds hexojpdev:/home/hexojp/code/hexojp
+docker cp dockerfiles/dev/themes hexojpdev:/home/hexojp/code/hexojp
+docker cp dockerfiles/dev/source hexojpdev:/home/hexojp/code/hexojp
+docker cp hexojpdev:/home/hexojp/code/hexojp/db/config.yaml dockerfiles/dev/db/config.yaml
+docker cp hexojpdev:/home/hexojp/code/hexojp/source dockerfiles/dev
+'''
+
+[tasks.dev_sync_down]
+script_runner = "@shell"
+script = '''
+docker cp hexojpdev:/home/hexojp/code/hexojp/db/config.yaml dockerfiles/dev/db/config.yaml
+docker cp hexojpdev:/home/hexojp/code/hexojp/source dockerfiles/dev
+docker cp hexojpdev:/home/hexojp/code/hexojp/db.json dockerfiles/dev/db.json
+'''
+
+[tasks.dev_generate]
+dependencies = ["dev_sync_up"]
+script_runner = "@shell"
+script = '''
+docker compose exec -u root --privileged hexojpdev chown -R hexojp:hexojp /home/hexojp/code/hexojp
+docker compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo make generate
+'''
+
+[tasks.dev_server]
+script_runner = "@shell"
+script = '''
+docker compose exec -u hexojp -w /home/hexojp/code/hexojp/ci hexojpdev cargo make server
+'''
+
+[tasks.dev_pacman_update]
+script_runner = "@shell"
+script = '''
+docker compose exec -u root --privileged -w /home/hexojp/code/hexojp/ci hexojpdev cargo make pacman_update
+'''
+
+[tasks.dev_fix_permissions]
+script_runner = "@shell"
+script = '''
+docker compose exec -u root --privileged hexojpdev chown -R hexojp:hexojp /home/hexojp/code/hexojp
+'''
