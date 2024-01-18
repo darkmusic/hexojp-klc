@@ -50,6 +50,7 @@ There is no time limit to finishing a blog post, so each entry does not have to 
 RUN reflector -l 5 --protocol https --sort rate --country US --save /etc/pacman.d/mirrorlist
 ```
 You can use either a 2-character country code or a country name here.  If you use a country name that has spaces, you must enclose it in double quotes.
+
 6. Copy **Makefile-docker.toml** or **Makefile-podman.toml** (depending on whether you use [Docker](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/)) and rename the copied file to Makefile.toml.
 7. Run `cargo make init` to initialize the containers.
 
