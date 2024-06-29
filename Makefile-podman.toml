@@ -57,6 +57,7 @@ dependencies = ["dev_server"]
 script_runner = "@shell"
 script = '''
 podman-compose down
+podman volume rm hexojp_postgres
 '''
 
 [tasks.podman_up]

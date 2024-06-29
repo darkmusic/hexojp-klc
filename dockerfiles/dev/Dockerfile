@@ -1,15 +1,15 @@
-FROM archlinux:base-devel AS base
+FROM archlinux AS base
 
 USER root
+COPY mirrorlist /etc/pacman.d/mirrorlist
 RUN pacman-key --init
 RUN pacman -Syy
 RUN pacman -S archlinux-keyring --noconfirm
-RUN pacman -S reflector rsync curl glibc --noconfirm
-RUN reflector -l 5 --protocol https --sort rate --country US --save /etc/pacman.d/mirrorlist
-
+RUN pacman -S openssl --noconfirm
+RUN pacman -S rsync curl glibc --noconfirm
 RUN pacman -S git vi vim nano wget ninja cmake iproute2 python python-virtualenv libpqxx unzip openssh \
               man-db man-pages htop inetutils perl perl-dbi perl-dbd-pg perl-yaml-tiny nodejs rust cargo-make \
-              postgresql nodejs npm --noconfirm
+              postgresql nodejs npm icu expat --noconfirm
 RUN npm install -g hexo-cli
 
 FROM base AS config

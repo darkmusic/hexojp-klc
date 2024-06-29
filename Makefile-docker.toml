@@ -57,6 +57,7 @@ dependencies = ["dev_server"]
 script_runner = "@shell"
 script = '''
 docker compose down
+docker volume rm hexojp_postgres
 '''
 
 [tasks.docker_up]
