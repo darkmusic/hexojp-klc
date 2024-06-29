@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # Tablespace for app
 mkdir /var/lib/postgresql/hexojp
