@@ -1,5 +1,5 @@
 {
-  "name": "hexo-site",
+  "name": "hexojp-klc",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,18 +9,18 @@
     "server": "hexo server"
   },
   "hexo": {
-    "version": "6.3.0"
+    "version": "7.3.0"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.4.2",
-    "hexo": "^6.3.0",
+    "@fortawesome/fontawesome-free": "^6.6.0",
+    "hexo": "^7.3.0",
     "hexo-generator-archive": "^2.0.0",
     "hexo-generator-category": "^2.0.0",
-    "hexo-generator-index": "^3.0.0",
+    "hexo-generator-index": "^4.0.0",
     "hexo-generator-tag": "^2.0.0",
     "hexo-renderer-ejs": "^2.0.0",
     "hexo-renderer-jade": "^0.5.0",
-    "hexo-renderer-marked": "^6.0.0",
+    "hexo-renderer-marked": "^6.3.0",
     "hexo-renderer-sass": "^0.5.0",
     "hexo-renderer-stylus": "^3.0.0",
     "hexo-server": "^3.0.0",

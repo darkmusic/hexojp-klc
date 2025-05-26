@@ -1,7 +1,8 @@
 package-lock.json
 node_modules
-dockerfiles/dev/db/config.yaml
-dockerfiles/dev/public
-dockerfiles/dev/db.json
-dockerfiles/dev/source/_posts/*.md
+public
+db.json
+source/_posts/*.md
 Makefile.toml
+settings.env
+db/config.yaml

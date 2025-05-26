@@ -1,34 +1,29 @@
-version: '3.8'
 services:
   hexojpdb:
-    build: 
-      context: ./dockerfiles/db
+    image: postgres:17.5-bookworm
+    env_file:
+      - path: ./settings.env
+        required: true
     environment:
-      - POSTGRES_USER=hexojpadmin
-      - POSTGRES_PASSWORD=hexojpadmin
-      - POSTGRES_DB=hexojp
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGDATA=${POSTGRES_PGDATA}
     container_name: hexojpdb
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
-      -  postgres:/var/lib/postgresql/data
+      -  "postgres:/var/lib/postgresql/data"
+      - "./dockerfiles/db/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh"
+      - "./dockerfiles/db/hexojp.tar.gz:/docker-entrypoint-initdb.d/hexojp.tar.gz"
     networks:
       - hexojp-network
     command:
       - "postgres"
       - "-c"
-      - "max_connections=1000"
+      - "max_connections=${MAX_CONNECTIONS}"
       - "-c"
-      - "shared_buffers=3GB"
-  hexojpdev:
-    container_name: hexojpdev
-    build:
-      context: ./dockerfiles/dev
-    ports:
-      - "4000:4000"
-    tty: true
-    networks:
-      - hexojp-network
+      - "shared_buffers=${SHARED_BUFFERS}"
 
 volumes:
   postgres:
