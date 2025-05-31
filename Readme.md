@@ -36,12 +36,12 @@ There is no time limit to finishing a blog post, so each entry does not have to 
 
 - [Postgresql](https://www.postgresql.org/) is used for the DB backend (used for note creation only).
 
-## Suggested Linux Packages
+## Suggested Linux/WSL Packages
 
 ```shell
-pacman -S openssl rsync curl glibc git vi vim nano wget ninja cmake iproute2 python python-virtualenv \
+openssl rsync curl glibc git vi vim nano wget ninja cmake iproute2 python python-virtualenv \
 libpqxx unzip openssh man-db man-pages htop inetutils perl perl-dbi perl-dbd-pg perl-yaml-tiny nodejs just \
-postgresql nodejs npm icu expat --noconfirm
+postgresql nodejs npm icu expat
 ```
 
 ## Windows Notes
