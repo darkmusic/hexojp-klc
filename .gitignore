@@ -6,3 +6,4 @@ source/_posts/*.md
 Makefile.toml
 settings.env
 db/config.yaml
+_config.yml

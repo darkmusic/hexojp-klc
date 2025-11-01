@@ -53,9 +53,9 @@ postgresql nodejs npm icu expat
 
 1. Clone this (or your) repository. Change URL as needed.  `git clone https://github.com/darkmusic/hexojp-klc`
 1. Initialize submodules if needed. `git submodule update --init --recursive`
-1. Copy **db/config_template.yaml** to **db/config.yaml** and edit accordingly.
-1. Edit **_config.yml** as needed.
-1. Copy **settings_template.env** to **settings.env** and edit accordingly.
+1. Copy `db/config_template.yaml` to `db/config.yaml` and edit accordingly.
+1. Copy `_config_template.yml` to `_config.yml` and edit accordingly.
+1. Copy `settings_template.env` to `settings.env` and edit accordingly.
 1. Run `just init` to initialize the containers.
 1. Wait a bit for the containers to start up, especially the DB container as this needs to initialize the database and restart.
 1. Run `just db restore` to restore the DB.
