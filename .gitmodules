@@ -1,0 +1,6 @@
+[submodule "themes/hexo-theme-aero-dual"]
+  path = themes/hexo-theme-aero-dual
+  url = https://github.com/levblanc/hexo-theme-aero-dual
+[submodule "themes/hexo-theme-butterfly"]
+	path = themes/hexo-theme-butterfly
+	url = https://github.com/jerryc127/hexo-theme-butterfly
