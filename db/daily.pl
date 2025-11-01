@@ -49,9 +49,9 @@ my $rv = $dbh->do($sql);
 # Get kanji basic info
 my $output = "";
 $sql = qq(
-  select c.id, c.literal 
-    from character c, klc_kanji kk 
-    where kk.character_id = c.id 
+  select c.id, c.literal
+    from character c, klc_kanji kk
+    where kk.character_id = c.id
     and kk.klc_number between ? and ?;);
 #print("$sql\n");
 my $kanji_sth = $dbh->prepare($sql);
@@ -138,7 +138,7 @@ print "Disconnected from database.\n";
 
 # Generate hexo post
 print "Generating hexo post.\n";
-my $hexo_output = `hexo new post $note_name`;
+my $hexo_output = `../node_modules/.bin/hexo new post $note_name`;
 print "$hexo_output\n";
 
 # Append generated output to post
