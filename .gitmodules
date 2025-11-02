@@ -4,3 +4,6 @@
 [submodule "themes/hexo-theme-butterfly"]
 	path = themes/hexo-theme-butterfly
 	url = https://github.com/jerryc127/hexo-theme-butterfly
+[submodule "themes/freemind.bithack"]
+	path = themes/freemind.bithack
+	url = https://github.com/Ares-X/hexo-theme-freemind.bithack

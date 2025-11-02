@@ -1,5 +1,6 @@
 ---
 title: {{ title }}
 date: {{ date }}
-tags:
+tags: kanji
+excerpt: Daily kanji selection.
 ---

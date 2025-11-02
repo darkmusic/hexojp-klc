@@ -10,18 +10,20 @@ This project is designed for studying the KLC list of kanji by introducing a fix
 
 Each blog entry will introduce a fixed number of kanji from the KLC list, in order introduced in the KLC book. The last known kanji number is stored in config.yaml. The daily script increments this number and fetches the daily kanji and a selection of words that use all known kanji, including the new kanji for today.
 
-The note generated displays each kanji, along with a brief description and readings. Sample words are also included that use only known kanji and kana.
-It is the task of the writer to construct some sentences that use these words, ideally in some sort of story.
-This will help build vocabulary and reinforce grammar.
+The note generated displays each kanji, along with a brief description and readings. Sample words are also included that use only known kanji.
+It is the task of the writer to construct some sentences that use these words, ideally in some sort of story. The story does not have to make sense; the idea is that it will help understand how these kanji and words are used in context. This will help build vocabulary and reinforce grammar, provided some time is spent verifying that the usage of the words is correct and the readings are appropriate.
 There is no time limit to finishing a blog post, so each entry does not have to be daily. But in the interest of learning 2300 kanji, it is recommended to write a blog entry at least a few times a week.
 
 ## Daily Kanji with Meanings and On/Kun Readings
 
-![Main page showing readings](images/Readings.jpg)
+![Main page showing readings](images/Readings.png)
 
-## Daily Random Selection of Words with Only Known Kanji and Kana
+## Daily Random Selection of Words with Only Known Kanji
 
-![Main page showing words](images/Words.jpg)
+![Main page showing words](images/Words.png)
+
+## User Story Section
+![User Story Section](images/UserStory.png)
 
 ## Tech Stack: Host
 
@@ -123,6 +125,103 @@ make server
 ```
 
 With this, you can do a `git add` on your repository and it will add the submodule instead of adding everything inside the theme's folder. Also if you re-clone your repository from scratch, if you follow the instructions in the **Initial one-time setup** above, your themes will be downloaded automatically.
+
+## Responsive column display configuration
+
+When only using a single column to display the kanji cards, it requires a lot of vertical scrolling. To improve usability, you can configure the kanji grid to use multiple columns based on screen size.
+The *.styl file for configuring this will depend on the theme you are using. For example, for **hexo-theme-aero-dual**, edit `themes/hexo-theme-aero-dual/source/css/_base.styl`.
+You can use the following code to create a responsive kanji grid that adjusts the number of columns based on the screen size:
+
+```stylus
+.kanji-grid
+  display grid
+  gap 2rem
+  margin 2rem 0
+
+  // Mobile: 1 column
+  grid-template-columns 1fr
+
+  // Tablet: 2 columns
+  @media (min-width: 768px)
+    grid-template-columns repeat(2, 1fr)
+
+  // Desktop: 3 columns
+  @media (min-width: 1024px)
+    grid-template-columns repeat(3, 1fr)
+
+  // Large desktop: 4 columns
+  @media (min-width: 1440px)
+    grid-template-columns repeat(4, 1fr)
+
+.kanji-card
+  border 1px solid rgba(0, 0, 0, 0.1)
+  padding 1.5rem
+  border-radius 8px
+  background-color rgba(255, 255, 255, 0.05)
+  transition all 0.3s ease
+
+  &:hover
+    box-shadow 0 4px 12px rgba(0, 0, 0, 0.15)
+    transform translateY(-2px)
+
+  h2
+    margin-top 0
+    font-size 2rem
+    color $theme-text-color
+    border-bottom 2px solid $theme-color
+    padding-bottom 0.5rem
+    margin-bottom 1rem
+
+  strong
+    color $theme-color
+
+.kanji-word
+  grid-column 1 / -1
+  padding 1.5rem
+  border-radius 8px
+  background-color rgba(255, 255, 255, 0.03)
+  margin 1rem 0
+```
+
+If the theme instead uses standard CSS files, you can use the following CSS code:
+
+```css
+.kanji-grid {
+  display: grid;
+  gap: 2rem;
+  margin: 2rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.kanji-card {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+.kanji-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+.kanji-card h2 {
+  margin-top: 0;
+  font-size: 2rem;
+  color: var(--theme-text-color);
+  border-bottom: 2px solid var(--theme-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+.kanji-card strong {
+  color: var(--theme-color);
+}
+.kanji-word {
+  grid-column: 1 / -1;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.03);
+  margin: 1rem 0;
+}
+```
 
 ## Example for adding a theme and dealing with theme-related issues
 

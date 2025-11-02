@@ -52,12 +52,18 @@ $sql = qq(
   select c.id, c.literal
     from character c, klc_kanji kk
     where kk.character_id = c.id
-    and kk.klc_number between ? and ?;);
+    and kk.klc_number between ? and ? + 1;);
 #print("$sql\n");
 my $kanji_sth = $dbh->prepare($sql);
 #print "daily min: $daily_min, daily max: $daily_max\n";
 $kanji_sth->execute($daily_min, $daily_max);
-while (my @kanjiRow = $kanji_sth->fetchrow_array) {
+
+# Store all kanji rows for reuse
+my $all_kanji = $kanji_sth->fetchall_arrayref;
+
+# First loop - build $output string
+for my $row ( @$all_kanji ) {
+  my @kanjiRow = @$row;
   $output = $output . "## $kanjiRow[1]\n";
 
   # Now get meanings
@@ -133,9 +139,6 @@ if($has_word == 1) {
   $output = $output . "**Words:**\n$word_text\n";
 }
 
-$dbh->disconnect();
-print "Disconnected from database.\n";
-
 # Generate hexo post
 print "Generating hexo post.\n";
 my $hexo_output = `../node_modules/.bin/hexo new post $note_name`;
@@ -144,5 +147,84 @@ print "$hexo_output\n";
 # Append generated output to post
 my $filename = "../source/_posts/$note_name.md";
 open(my $fh, '>>', $filename) or die "Could not open file '$filename' $!";
-say $fh $output;
+say $fh '<div class="kanji-grid">';
+
+# Second loop - write to file with card divs
+for my $row ( @$all_kanji ) {
+    my @kanjiRow = @$row;
+    my $character = $kanjiRow[0];
+
+    say $fh '<div class="kanji-card">';
+    say $fh "\n## $kanjiRow[1]";
+
+    # Now get meanings
+    my $has_meaning = 0;
+    my $meaning_text = "";
+    $sql = qq(select meaning from meaning where character = ? and language = 'en';);
+    my $reading_sth = $dbh->prepare($sql);
+    $reading_sth->execute($character);
+    while (my @meaningRow = $reading_sth->fetchrow_array) {
+      $has_meaning = 1;
+      $meaning_text = $meaning_text . "- $meaningRow[0]\n"
+    }
+    if ($has_meaning == 1) {
+        say $fh "**Meanings:**";
+        say $fh $meaning_text;
+    }
+
+    # Now get on readings
+    my $has_onreading = 0;
+    my $onreading_text = "";
+    $sql = qq(select reading from reading where character = ? and type = 'ja_on';);
+    $reading_sth = $dbh->prepare($sql);
+    $reading_sth->execute($character);
+    while (my @onReadingRow = $reading_sth->fetchrow_array) {
+      $has_onreading = 1;
+      $onreading_text = $onreading_text . "- $onReadingRow[0]\n"
+    }
+    if ($has_onreading == 1) {
+        say $fh "**On Readings:**";
+        say $fh $onreading_text;
+    }
+
+    # Now get kun readings
+    my $has_kunreading = 0;
+    my $kunreading_text = "";
+    $sql = qq(select reading from reading where character = ? and type = 'ja_kun';);
+    $reading_sth = $dbh->prepare($sql);
+    $reading_sth->execute($character);
+    while (my @kunReadingRow = $reading_sth->fetchrow_array) {
+      $has_kunreading = 1;
+      $kunreading_text = $kunreading_text . "- $kunReadingRow[0]\n"
+    }
+    if ($has_kunreading == 1) {
+        say $fh "**Kun Readings:**";
+        say $fh $kunreading_text;
+    }
+
+    say $fh '</div>';  # Close kanji-card
+}
+
+if($has_word == 1) {
+  say $fh '<div class="kanji-word">';
+  say $fh "\n";
+  say $fh "**Words:**";
+  say $fh "\n";
+  say $fh $word_text;
+  say $fh '</div>';  # Close kanji-word
+}
+
+say $fh '<div class="kanji-word">';
+say $fh "\n";
+say $fh "**User Story**";
+say $fh "\n";
+say $fh "</div>";
+
+
+say $fh '</div>';  # Close kanji-grid
+
 close $fh;
+
+# Now safe to disconnect after all DB operations complete
+$dbh->disconnect();
+print "Disconnected from database.\n";
