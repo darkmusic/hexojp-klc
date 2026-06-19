@@ -1,6 +1,6 @@
 {
   "name": "hexojp-klc",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "build": "hexo generate",
@@ -9,7 +9,7 @@
     "server": "hexo server"
   },
   "hexo": {
-    "version": "8.1.1"
+    "version": "8.1.2"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
@@ -29,5 +29,10 @@
     "hexo-tag-bootstrap": "^0.2.2",
     "hexo-theme-butterfly": "5.5.1",
     "hexo-theme-landscape": "^1.0.0"
+  },
+  "allowScripts": {
+    "hexo-util@3.3.0": true,
+    "hexo-util@4.0.0": true,
+    "@parcel/watcher@2.5.6": true
   }
 }

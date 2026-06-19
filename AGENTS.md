@@ -1,4 +1,4 @@
-# Hexo JP KLC - Copilot Instructions
+# Hexo JP KLC - Agent Instructions
 
 ## Project Overview
 A specialized Hexo-based Japanese learning blog that generates daily kanji study posts. The system combines:
